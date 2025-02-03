@@ -29,7 +29,9 @@ jobs:
         run: dotnet publish -c Release -o ./build KrypteringApi.csproj # Publicerar applikationen till build-mappen
 
       - name: Create zip file
-        run: zip -r KrypteringApi.zip ./build . # Skapar en zip-fil från build-mappen
+        run: |
+            cd build
+            zip -r ../KrypteringApi.zip .
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
@@ -39,5 +41,5 @@ jobs:
           application_name: 'Kryptering API' # Applikationens namn (kan behöva justeras)
           environment_name: KrypteringAPI-env # Miljöns namn (kan behöva justeras)
           deployment_package: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
-          version_label: 2
+          version_label: 3
           region: eu-north-1
