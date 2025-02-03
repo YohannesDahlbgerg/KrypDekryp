@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.x' # Eller den version du använder
+          dotnet-version: '9.x' # Eller den version du använder
 
       - name: Build application
         run: dotnet build --configuration Release KrypteringApi.csproj # Bygger det specifika projektet
