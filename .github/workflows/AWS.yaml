@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.x' # Eller den version du använder
+          dotnet-version: '8.x' # Eller den version du använder
 
       - name: Build application
         run: dotnet build --configuration Release KrypteringApi.csproj # Bygger det specifika projektet
@@ -41,5 +41,5 @@ jobs:
           application_name: 'Kryptering API' # Applikationens namn (kan behöva justeras)
           environment_name: KrypteringAPI-env # Miljöns namn (kan behöva justeras)
           deployment_package: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
-          version_label: 3
+          version_label: 4
           region: eu-north-1
