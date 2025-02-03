@@ -36,10 +36,10 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application-name: KrypteringApi # Applikationens namn (kan behöva justeras)
-          environment-name: KrypteringApi-env # Miljöns namn (kan behöva justeras)
-          zip-file: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: KrypteringApi # Applikationens namn (kan behöva justeras)
+          environment_name: KrypteringApi-env # Miljöns namn (kan behöva justeras)
+          deployment_package: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
           version_label: 1
           region: eu-north-1
