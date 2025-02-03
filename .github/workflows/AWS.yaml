@@ -1,0 +1,43 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.x' # Eller den version du använder
+
+      - name: Build application
+        run: dotnet build --configuration Release KrypteringApi.csproj # Bygger det specifika projektet
+
+      - name: Create build directory
+        run: mkdir build # Skapar build-mappen
+
+      - name: Publish application
+        run: dotnet publish -c Release -o ./build KrypteringApi.csproj # Publicerar applikationen till build-mappen
+
+      - name: Create zip file
+        run: zip -r KrypteringApi.zip ./build # Skapar en zip-fil från build-mappen
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/aws-elastic-beanstalk-deploy-action@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application-name: KrypteringApi # Applikationens namn (kan behöva justeras)
+          environment-name: KrypteringApi-env # Miljöns namn (kan behöva justeras)
+          zip-file: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
