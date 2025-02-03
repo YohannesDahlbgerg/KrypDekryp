@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+
 
 jobs:
   deploy:
@@ -31,7 +29,7 @@ jobs:
         run: dotnet publish -c Release -o ./build KrypteringApi.csproj # Publicerar applikationen till build-mappen
 
       - name: Create zip file
-        run: zip -r KrypteringApi.zip ./build # Skapar en zip-fil från build-mappen
+        run: zip -r KrypteringApi.zip ./build . # Skapar en zip-fil från build-mappen
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
