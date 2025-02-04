@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+
 
 jobs:
   deploy:
@@ -19,7 +17,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.x' # Eller den version du använder
+          dotnet-version: '8.x' # Eller den version du använder
 
       - name: Build application
         run: dotnet build --configuration Release KrypteringApi.csproj # Bygger det specifika projektet
@@ -31,13 +29,17 @@ jobs:
         run: dotnet publish -c Release -o ./build KrypteringApi.csproj # Publicerar applikationen till build-mappen
 
       - name: Create zip file
-        run: zip -r KrypteringApi.zip ./build # Skapar en zip-fil från build-mappen
+        run: |
+            cd build
+            zip -r ../KrypteringApi.zip .
 
       - name: Deploy to Elastic Beanstalk
-        uses: einaregilsson/aws-elastic-beanstalk-deploy-action@v2
+        uses: einaregilsson/beanstalk-deploy@v22
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application-name: KrypteringApi # Applikationens namn (kan behöva justeras)
-          environment-name: KrypteringApi-env # Miljöns namn (kan behöva justeras)
-          zip-file: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: 'Kryptering API' # Applikationens namn (kan behöva justeras)
+          environment_name: KrypteringAPI-env # Miljöns namn (kan behöva justeras)
+          deployment_package: ./KrypteringApi.zip # Sökväg till den zippade filen (uppdaterad)
+          version_label: 4
+          region: eu-north-1
