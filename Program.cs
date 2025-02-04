@@ -1,8 +1,8 @@
 using System;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -18,15 +18,23 @@ app.MapPost("/Kryptering", (KryptoRequest request) =>
     return Results.Ok(new { EncryptedText = encryptedText });
 });
 
+app.MapPost("/Dekryptering", (KryptoRequest request) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Text))
+        return Results.BadRequest("Text får inte vara tom.");
+
+    string decryptedText = CaesarDecrypt(request.Text, request.Key);
+    return Results.Ok(new { DecryptedText = decryptedText });
+});
+
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 app.Urls.Add($"http://*:{port}");
-
-app.MapGet("/Dekryptering", () => "");
 
 app.Run();
 
 // Metod för Caesar-chiffer
 string CaesarEncrypt(string text, int key) => CaesarShift(text, key);
+string CaesarDecrypt(string text, int key) => CaesarShift(text, -key);
 
 string CaesarShift(string text, int key)
 {
@@ -57,3 +65,5 @@ public class KryptoRequest
     public string Text { get; set; }
     public int Key { get; set; }
 }
+
+// kommentar för version labeln
